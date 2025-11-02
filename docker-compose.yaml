@@ -1,0 +1,53 @@
+services:
+  script:
+    image: ingestion:2
+    # set attribute to manage credentials
+    environment:
+      ENV: staging/credentials/
+      DBNAME: ${DB_NAME}
+      HOST: ${DB_HOST}
+      KEY_FILE: /run/secrets/api_secret
+      LOG_FILE: /logs/
+      PASS_FILE: /run/secrets/postgres_pass
+      SQL_FILE: /src/sql
+      USER_FILE: /run/secrets/postgres_user
+    volumes:
+      - ingestionlog:/logs/
+    secrets:
+      - api_secret
+      - postgres_user
+      - postgres_pass
+      
+
+  db:
+    image: postgres:17
+    restart: always
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER_FILE: /run/secrets/postgres_user
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pass
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    secrets:
+      - postgres_user
+      - postgres_pass
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+       
+secrets:
+  api_secret:
+    file: ./staging/credentials/api_key.txt
+  postgres_user:
+    file: ./staging/credentials/db_user.txt
+  postgres_pass:
+    file: ./credentials/db_pass.txt
+volumes:
+  ingestionlog:
+  postgresdata:
+  
