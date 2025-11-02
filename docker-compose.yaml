@@ -46,7 +46,7 @@ secrets:
   postgres_user:
     file: ./staging/credentials/db_user.txt
   postgres_pass:
-    file: ./credentials/db_pass.txt
+    file: ./staging/credentials/db_pass.txt
 volumes:
   ingestionlog:
   postgresdata:
