@@ -7,7 +7,7 @@ import psycopg2
 import requests
 from sqlalchemy import create_engine
 
-from utils.config import DBNAME, HOST, KEY, LOG_FILE, SQL_FILE
+from utils.config import DBNAME, HOST, KEY, LOG_FILE, SQL_FILE, USER, PASS, PORT
 
 # Set logs destination
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ logging.basicConfig(
 
 
 # Define database connection and set up table(s)
-time.sleep(15.0)
+time.sleep(5)
 
 def db_setup() -> None:
     """ Function to setup postgresql schema and table """
@@ -28,9 +28,10 @@ def db_setup() -> None:
         logging.info("Initializing database setup...")
         conn = psycopg2.connect(
             database=DBNAME,
-            # user=USER,
-            # password=PASS,
-            host=HOST
+            user=USER,
+            password=PASS,
+            host=HOST,
+            port=PORT
             )
 
         # Open a cursor to perform database operations
@@ -59,7 +60,7 @@ querystring = {
     "per_page": 10,
     "api_key": KEY,
     }
-engine = create_engine(f"postgresql+psycopg2://{USER}:{PASS}@{HOST}/{DBNAME}")
+engine = create_engine(f"postgresql+psycopg2://{USER}:{PASS}@{HOST}:{PORT}/{DBNAME}")
 schema = "silver"
 table = "news"
 
