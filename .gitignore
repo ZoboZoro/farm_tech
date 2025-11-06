@@ -1,4 +1,7 @@
-*ipynb
+notebooks
 *env
 credentials
 *log*
+*dump*
+config*
+*cache*
