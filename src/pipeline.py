@@ -7,7 +7,7 @@ import psycopg2
 import requests
 from sqlalchemy import create_engine
 
-from utils.config import DBNAME, HOST, KEY, LOG_FILE, SQL_FILE, USER, PASS, PORT
+from utils.dockerconfig import DBNAME, HOST, KEY, LOG_FILE, SQL_FILE, USER, PASS, PORT
 
 # Set logs destination
 logger = logging.getLogger(__name__)
