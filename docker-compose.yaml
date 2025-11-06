@@ -1,11 +1,14 @@
 services:
+
   script:
-    image: ingestion:2
+    image: ingestion:1
     # set attribute to manage credentials
+    depends_on:
+      - db
+    env_file:
+      - staging/credentials/.env
     environment:
       ENV: staging/credentials/
-      DBNAME: ${DB_NAME}
-      HOST: ${DB_HOST}
       KEY_FILE: /run/secrets/api_secret
       LOG_FILE: /logs/
       PASS_FILE: /run/secrets/postgres_pass
@@ -13,11 +16,11 @@ services:
       USER_FILE: /run/secrets/postgres_user
     volumes:
       - ingestionlog:/logs/
+      - ./dockerlogs/:/logs/
     secrets:
       - api_secret
       - postgres_user
       - postgres_pass
-      
 
   db:
     image: postgres:17
@@ -28,6 +31,8 @@ services:
       POSTGRES_USER_FILE: /run/secrets/postgres_user
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_pass
       POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5433:5432"
     volumes:
       - postgresdata:/var/lib/postgresql/data
     secrets:
@@ -38,8 +43,8 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8080:8080
-       
+      - 8080:8080    
+
 secrets:
   api_secret:
     file: ./staging/credentials/api_key.txt
