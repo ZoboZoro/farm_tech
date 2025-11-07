@@ -7,5 +7,5 @@
 #
 #
 #####################
-
+echo "`date +\%Y-\%m-\%d,\%H:\%M:\%S` ::: now starting services..."
 docker compose up -d
